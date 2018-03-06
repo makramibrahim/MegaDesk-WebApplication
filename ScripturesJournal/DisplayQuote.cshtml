@@ -1,0 +1,45 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Disply Quote";
+
+    var db = Database.OpenConnectionString("Data Source=|DataDirectory|\\MyScripturesJournalDB.sdf", "System.Data.SqlServerCe.4.0");
+    var selectCommand = "SELECT * FROM Scripturestb";
+    var searchTerm = "";
+
+    if (!Request.QueryString["searchVerse"].IsEmpty())
+    {
+        selectCommand = "SELECT * FROM Scripturestb WHERE Verse LIKE @0 OR Book LIKE @0 OR Date LIKE @0 OR Notes LIKE @0";
+        searchTerm = "%" + Request["searchVerse"] + "%";
+    }
+
+    var selectedData = db.Query(selectCommand, searchTerm);
+    var grid = new WebGrid(source: selectedData, defaultSort: "Verse", rowsPerPage: 3);
+}
+
+<div class="container">
+    <form class="form-inline my-2 my-lg-2" method="get">
+        <input class="form-control mr-sm-2" name="searchVerse"
+               value="@Request.QueryString["searchVerse"]" placeholder="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+    <div>
+        @grid.GetHtml(
+                                 tableStyle: "table-light grid",
+                                  headerStyle: "table-primary",
+                                  alternatingRowStyle: "table-active",
+                                columns: grid.Columns(
+
+                                                grid.Column("Date"),
+                                                grid.Column("Book"),
+                                                grid.Column("Chapter"),
+                                                grid.Column("Verse"),
+                                                grid.Column("Notes"),
+                                                grid.Column(format: @<a href="~/Delete.cshtml?id=@item.ID">Delete</a>),
+                                                      grid.Column(format: @<a href="~/Edit.cshtml?id=@item.ID">Edit</a>)
+
+                                                                   )
+                                                                )
+    </div>
+    <a class="btn btn-success" type="button" href="~/Create.cshtml">Add Quote</a>
+</div>
