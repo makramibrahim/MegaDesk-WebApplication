@@ -8,26 +8,34 @@
     Validation.RequireField("Verse", "*");
     Validation.RequireField("Notes", "*");
 
-    var chapter = "";
-    var book = "";
-    var date = "";
-    var verse = "";
-    var notes = "";
+    var clientName = "";
+    var rushDays = "";
+    var quotePrice = "";
+    var deskWidth = "";
+    var deskDepth = "";
+    var material = "";
+    var deskDrawers = "";
+    var quoteDate = "";
+    var surface = "";
 
 
     if (IsPost)
     {
         if (Validation.IsValid())
         {
-            chapter = Request.Form["Chapter"];
-            book = Request.Form["Book"];
-            date = Request.Form["Date"];
-            verse = Request.Form["Verse"];
-            notes = Request.Form["Notes"];
+            clientName = Request.Form["ClientName"];
+            rushDays = Request.Form["RushDays"];
+            quotePrice = Request.Form["QuotePrice"];
+            deskWidth = Request.Form["DeskWidth"];
+            deskDepth = Request.Form["DeskDepth"];
+            material = Request.Form["Material"];
+            deskDrawers = Request.Form["DeskDrawers"];
+            quoteDate = Request.Form["QuoteDate"];
+            surface = Request.Form["Surface"]; 
 
-            var db = Database.OpenConnectionString("Data Source=|DataDirectory|\\MyScripturesJournalDB.sdf", "System.Data.SqlServerCe.4.0");
-            var insertCommand = "INSERT INTO Scripturestb (Chapter, Book, Date, Verse, Notes) VALUES(@0, @1, @2, @3, @4)";
-            db.Execute(insertCommand, chapter, book, date, verse, notes);
+            var db = Database.OpenConnectionString("Data Source=|DataDirectory|\\MegaDeskDB.sdf", "System.Data.SqlServerCe.4.0");
+            var insertCommand = "INSERT INTO MegaDesktb (ClientName, RushDays, QuotePrice, DeskWidth, DeskDepth, Material, DeskDrawers, QuoteDate, Suface) VALUES(@0, @1, @2, @3, @4, @5, @6, @7, @8)";
+            db.Execute(insertCommand, clientName, rushDays, quotePrice, deskWidth, deskDepth, material, deskDrawers, quoteDate, surface);
 
             Response.Redirect("~/Index");
         }
@@ -35,31 +43,44 @@
 }
 
 <div class="container">
-    <h2>Create New Journal</h2><br />
+    <h2>New Quote</h2><br />
     <form class="form-group" method="post">
+        <p name="deskDepth" value="@DateTime.Now">@DateTime.Now</p>
+        <div class="row">
+            <div class="col">
 
-         @Html.ValidationMessage("book")
-        <label class="col-form-label" for="inputDefault">Book</label>
-        <input type="text" class="form-control" placeholder="Book name" name="book" value="@Request.Form["book"]">
-       
-         @Html.ValidationMessage("chapter")
-        <label class="col-form-label" for="inputDefault">Chapter</label>
-        <input type="text" class="form-control" placeholder="Chapter number" name="chapter" value="@Request.Form["chapter"]">
-       
-         @Html.ValidationMessage("notes")
-        <label class="col-form-label" for="inputDefault">Notes</label>
-        <input type="text" class="form-control" placeholder="Your Notes" name="notes" value="@Request.Form["notes"]">
-       
-        @Html.ValidationMessage("date")
-        <label class="col-form-label" for="inputDefault">Date</label>
-        <input type="text" class="form-control" name="date" value="@Request.Form["date"]" placeholder="@DateTime.Now">
-        
-         @Html.ValidationMessage("verse")
-        <label class="col-form-label" for="inputDefault">Verses</label>
-        <textarea type="text" class="form-control" placeholder="Add your Verse" name="verse" value="@Request.Form["verse"]"></textarea>
-       
+                @Html.ValidationMessage("clientName")
+                <label class="col-form-label" for="inputDefault">Client Name</label>
+                <input type="text" class="form-control" name="clientName" value="@Request.Form["clientName"]" />
+
+                @Html.ValidationMessage("rushDays")
+                <label class="col-form-label" for="inputDefault">Rush Days</label>
+                <input type="text" class="form-control" name="rushDays" value="@Request.Form["rushDays"]" />
+
+                @Html.ValidationMessage("material")
+                <label class="col-form-label" for="inputDefault">Material</label>
+                <input type="text" class="form-control"  name="material" value="@Request.Form["material"]" />
+
+
+            </div>
+            <div class="col">
+
+                @Html.ValidationMessage("deskWidth")
+                <label class="col-form-label" for="inputDefault">Desk Wdith</label>
+                <input type="text" class="form-control" name="deskWidth" value="@Request.Form["deskWidth"]" />
+
+                @Html.ValidationMessage("deskDepth")
+                <label class="col-form-label" for="inputDefault">Desk Depth</label>
+                <input type="text" class="form-control" name="deskDepth" value="@Request.Form["deskDpeth"]" />
+
+
+                @Html.ValidationMessage("deskDrawers")
+                <label class="col-form-label" for="inputDefault">Desk Depth</label>
+                <input type="text" class="form-control" name="deskDrawers" value="@Request.Form["deskDrawers"]" />
+            </div>
+        </div>
         <br>
-        <button class="btn btn-success" type="submit" name="SubmitBtn" value="Add Scripture">Submit</button>
+        <button class="btn btn-success" type="submit" name="SubmitBtn" value="Add Quote">Submit</button>
     </form>
     <a href="~/Index.cshtml">Return to Scriptures List</a>
 </div>

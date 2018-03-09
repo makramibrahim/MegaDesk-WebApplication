@@ -2,47 +2,59 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = "Delete a Scripture";
 
-    var chapter = "";
-    var book = "";
-    var verse = "";
-    var notes = "";
-    var scriptureId = "";
+    var clientName = "";
+    var rushDays = "";
+    var quotePrice = "";
+    var deskWidth = "";
+    var deskDepth = "";
+    var material = "";
+    var deskDrawers = "";
+    var quoteDate = "";
+    var surface = "";
+    var quoteID = "";
+
 
     if (!IsPost)
     {
         if (!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
         {
-            scriptureId = Request.QueryString["ID"];
-            var db = Database.OpenConnectionString("Data Source=|DataDirectory|\\MyScripturesJournalDB.sdf", "System.Data.SqlServerCe.4.0");
-            var dbCommand = "SELECT * FROM Scripturestb WHERE ID = @0";
-            var row = db.QuerySingle(dbCommand, scriptureId);
+            quoteID = Request.QueryString["ID"];
+            var db = Database.OpenConnectionString("Data Source=|DataDirectory|\\MegaDeskDB.sdf", "System.Data.SqlServerCe.4.0");
+            var dbCommand = "SELECT * FROM MegaDesktb WHERE ID = @0";
+            var row = db.QuerySingle(dbCommand, quoteID);
             if (row != null)
             {
-                chapter = Convert.ToString(row.Chapter);
-                book = row.Book;
-                verse = row.Verse;
-                notes = row.Notes;
+                clientName = row.ClientName;
+                rushDays = row.RushDays;
+                quotePrice = row.QuotePRice;
+                deskWidth = row.DeskWidth;
+                deskDepth = row.DeskDepth;
+                material = row.Material;
+                deskDrawers = row.DeskDrawers;
+                quoteDate = row.QuoteDate;
+                surface = row.Surface;
+
 
             }
             else
             {
-                Validation.AddFormError("No scriptures was found for that ID.");
+                Validation.AddFormError("No Quotes were found for that ID.");
 
             }
         }
         else
         {
-            Validation.AddFormError("No scriptures was found for that ID.");
+            Validation.AddFormError("No Quotes were found for that ID.");
 
         }
     }
 
     if (IsPost && !Request["buttonDelete"].IsEmpty())
     {
-        scriptureId = Request.Form["scriptureId"];
-        var db = Database.OpenConnectionString("Data Source=|DataDirectory|\\MyScripturesJournalDB.sdf", "System.Data.SqlServerCe.4.0");
-        var deleteCommand = "DELETE FROM Scripturestb WHERE ID = @0";
-        db.Execute(deleteCommand, scriptureId);
+        quoteID = Request.Form["quoteID"];
+        var db = Database.OpenConnectionString("Data Source=|DataDirectory|\\MegaDeskDB.sdf", "System.Data.SqlServerCe.4.0");
+        var deleteCommand = "DELETE FROM MegaDesktb WHERE ID = @0";
+        db.Execute(deleteCommand, quoteID);
         Response.Redirect("~/Index");
     }
 
@@ -57,15 +69,20 @@
 
             <div class="alert alert-dismissible alert-warning">
                 <h4 class="alert-heading"> Delete!</h4><br />
-                <p class="mb-0"><span><b>Book:</b> @book</span></p><hr />
-                <p class="mb-0"> <span><b>Chapter:</b> @chapter</span></p><hr />
-                <p class="mb-0"> <span><b>Verse:</b> @verse</span></p><hr />
-                <p class="mb-0"> <span><b>Notes:</b> @notes</span></p><hr />
+                <p class="mb-0"><span><b>Book:</b> @clientName</span></p><hr />
+                <p class="mb-0"> <span><b>Chapter:</b> @rushDays</span></p><hr />
+                <p class="mb-0"> <span><b>Verse:</b> @quotePrice</span></p><hr />
+                <p class="mb-0"> <span><b>Notes:</b> @deskWidth</span></p><hr />
+                <p class="mb-0"><span><b>Book:</b> @deskDepth</span></p><hr />
+                <p class="mb-0"> <span><b>Chapter:</b> @material</span></p><hr />
+                <p class="mb-0"> <span><b>Verse:</b> @deskDrawers</span></p><hr />
+                <p class="mb-0"> <span><b>Notes:</b> @quoteDate</span></p><hr />
+                <p class="mb-0"><span><b>Book:</b> @surface</span></p><hr />
             </div>
 
-            <input type="hidden" name="scriptureId" value="@scriptureId" />
-            <p><input class="btn btn-warning" type="submit" name="buttonDelete" value="Delete Scripture" /></p>
+            <input type="hidden" name="quoteID" value="@quoteID" />
+            <p><input class="btn btn-warning" type="submit" name="buttonDelete" value="Delete Quote" /></p>
         </fieldset>
     </form>
-    <p><a href="~/Index.cshtml">Return to scripture listing</a></p>
+    <p><a href="~/Index.cshtml">Return to Quotes</a></p>
 </div>

@@ -2,24 +2,24 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = "Disply Quote";
 
-    var db = Database.OpenConnectionString("Data Source=|DataDirectory|\\MyScripturesJournalDB.sdf", "System.Data.SqlServerCe.4.0");
-    var selectCommand = "SELECT * FROM Scripturestb";
+    var db = Database.OpenConnectionString("Data Source=|DataDirectory|\\MegaDeskDB.sdf", "System.Data.SqlServerCe.4.0");
+    var selectCommand = "SELECT * FROM MegaDesktb";
     var searchTerm = "";
 
-    if (!Request.QueryString["searchVerse"].IsEmpty())
+    if (!Request.QueryString["searchQuote"].IsEmpty())
     {
-        selectCommand = "SELECT * FROM Scripturestb WHERE Verse LIKE @0 OR Book LIKE @0 OR Date LIKE @0 OR Notes LIKE @0";
-        searchTerm = "%" + Request["searchVerse"] + "%";
+        selectCommand = "SELECT * FROM MegaDesktb WHERE Quote LIKE @0 OR Material LIKE @0 OR Date LIKE @0 OR ClientName LIKE @0";
+        searchTerm = "%" + Request["searchQuote"] + "%";
     }
 
     var selectedData = db.Query(selectCommand, searchTerm);
-    var grid = new WebGrid(source: selectedData, defaultSort: "Verse", rowsPerPage: 3);
+    var grid = new WebGrid(source: selectedData, defaultSort: "Quote", rowsPerPage: 3);
 }
 
 <div class="container">
     <form class="form-inline my-2 my-lg-2" method="get">
-        <input class="form-control mr-sm-2" name="searchVerse"
-               value="@Request.QueryString["searchVerse"]" placeholder="Search">
+        <input class="form-control mr-sm-2" name="searchQuote"
+               value="@Request.QueryString["searchQuote"]" placeholder="Search">
         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
     </form>
 
@@ -30,11 +30,16 @@
                                   alternatingRowStyle: "table-active",
                                 columns: grid.Columns(
 
-                                                grid.Column("Date"),
-                                                grid.Column("Book"),
-                                                grid.Column("Chapter"),
-                                                grid.Column("Verse"),
-                                                grid.Column("Notes"),
+                                                grid.Column("ClientName"),
+                                                grid.Column("RushDays"),
+                                                grid.Column("QuotePrice"),
+                                                grid.Column("DeskWidth"),
+                                                grid.Column("DeskDepth"),
+                                                grid.Column("Material"),
+                                                grid.Column("DeskDrawers"),
+                                                grid.Column("QuoteDate"),
+                                                grid.Column("Surface"),
+
                                                 grid.Column(format: @<a href="~/Delete.cshtml?id=@item.ID">Delete</a>),
                                                       grid.Column(format: @<a href="~/Edit.cshtml?id=@item.ID">Edit</a>)
 
